@@ -15,8 +15,8 @@ if (!SESSION_SECRET) throw new Error("SESSION_SECRET is not set");
 app.use(express.json());
 app.use(cookieParser(SESSION_SECRET));
 
-// Everything lives under /api so that a single Vercel Serverless Function
-// (api/index.ts) can own the whole backend while the client is static.
+// Everything lives under /api because Vercel's top-level rewrite routes /api/*
+// to this service and passes the original path through, prefix included.
 // Client and API share one origin in every environment, so there's no CORS.
 const api = express.Router();
 

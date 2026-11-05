@@ -23,7 +23,7 @@ export class ApiError extends Error {
 }
 
 // Same-origin in every environment: Vite proxies /api to the dev server
-// locally, and on Vercel /api/* is handled by the serverless function.
+// locally, and on Vercel a top-level rewrite routes /api/* to the server service.
 const API_BASE = "/api";
 
 async function request<T>(path: string, options: { method?: string; body?: unknown } = {}): Promise<T> {

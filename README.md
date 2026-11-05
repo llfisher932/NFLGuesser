@@ -45,7 +45,7 @@ MUI client, passwords generated and handed out by the admin.
 | Backend | Node, Express 5, TypeScript |
 | ORM | Prisma 7 (`prisma-client` generator, `@prisma/adapter-pg`) |
 | Database | PostgreSQL |
-| Hosting | Vercel: static client + one Serverless Function |
+| Hosting | Vercel Services (beta): a `client` and a `server` service in one project |
 
 ## Setup (local)
 
@@ -67,8 +67,12 @@ Checks: `npm run typecheck`, `npm test` (scoring), `npm run lint --workspace cli
 
 1. Provision a hosted Postgres (Neon, Supabase, Prisma Postgres…). Keep a direct
    (non-pgbouncer) URL for migrations.
-2. Import the repo into Vercel. `vercel.json` already sets the build command,
-   output directory and the `/api` rewrite. Framework preset: Other.
+2. Import the repo into Vercel with the Root Directory left at the repo root.
+   `vercel.json` defines two services and routes the one domain to them:
+   `/api/*` goes to `server` (Express, which gets the path with `/api` intact)
+   and everything else to `client` (Vite, falling back to `index.html` for
+   client-side routes). The browser is the only thing that calls the API, over
+   that public path, so there are no service bindings.
 3. Set `DATABASE_URL` and `SESSION_SECRET` for Production, Preview and
    Development.
 4. From your machine, with `.env` pointing at the hosted database:
@@ -80,7 +84,7 @@ Migrations are never run by the build, so a bad one can't take the site down.
 ## Project structure
 
 ```
-api/index.ts               Vercel function: hands /api/* to Express
+vercel.json                the client and server services + public routing
 server/
   prisma/schema.prisma     User, Organization, Membership, Week, Game, Prediction, SyncState
   prisma/seed.ts           creates the admin account once

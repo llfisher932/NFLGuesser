@@ -3,8 +3,12 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "postinstall": "prisma generate",
+    "build": "prisma generate",
     "dev": "nodemon",
     "typecheck": "tsc --noEmit",
     "seed": "prisma db seed",
