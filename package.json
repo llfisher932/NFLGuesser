@@ -1,0 +1,24 @@
+{
+  "name": "nflguesser",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "prisma:generate": "cd server && prisma generate",
+    "build": "npm run prisma:generate && npm run build --workspace client",
+    "vercel-build": "npm run build",
+    "dev:server": "npm run dev --workspace server",
+    "dev:client": "npm run dev --workspace client",
+    "typecheck": "npm run typecheck --workspace server",
+    "test": "npm run test --workspace server",
+    "db:migrate": "cd server && prisma migrate deploy",
+    "db:seed": "npm run seed --workspace server"
+  }
+}

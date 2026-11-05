@@ -1,0 +1,18 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel
+
+# Prisma client is generated on install / build
+server/src/generated
+
+# Logs / editor junk
+*.log
+.DS_Store
+.idea
+.vscode/*
+!.vscode/extensions.json
