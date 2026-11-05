@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <ellipse cx="32" cy="32" rx="28" ry="17" transform="rotate(-35 32 32)" fill="#8a4b22"/>
+  <ellipse cx="32" cy="32" rx="28" ry="17" transform="rotate(-35 32 32)" fill="#7a1c29"/>
   <g stroke="#fff" stroke-width="3" stroke-linecap="round" transform="rotate(-35 32 32)">
     <line x1="22" y1="32" x2="42" y2="32"/>
     <line x1="26" y1="28" x2="26" y2="36"/>

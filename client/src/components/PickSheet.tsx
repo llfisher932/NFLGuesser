@@ -115,7 +115,7 @@ const PickSheet = ({ games: initial, onSave, onClear, ignoreLock = false, pickLa
       </Box>
 
       <Paper
-        elevation={6}
+        elevation={3}
         sx={{
           position: "sticky",
           bottom: 16,
@@ -124,7 +124,8 @@ const PickSheet = ({ games: initial, onSave, onClear, ignoreLock = false, pickLa
           display: "flex",
           alignItems: "center",
           gap: 2,
-          borderRadius: 3,
+          border: 1,
+          borderColor: "divider",
         }}>
         <Stack sx={{ flex: 1, minWidth: 0 }}>
           <Typography variant="body2" sx={{ fontWeight: 600 }}>

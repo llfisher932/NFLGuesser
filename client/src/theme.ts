@@ -1,5 +1,8 @@
 import type { PaletteMode, ThemeOptions } from "@mui/material";
 
+/** The nav bar is maroon in both modes; everything on it is white. */
+export const BAR_COLOR = { light: "#6b1622", dark: "#4a0f18" } as const;
+
 export function getTheme(mode: PaletteMode): ThemeOptions {
   const isLight = mode === "light";
 
@@ -7,24 +10,26 @@ export function getTheme(mode: PaletteMode): ThemeOptions {
     palette: {
       mode,
       background: {
-        default: isLight ? "#f4f6f3" : "#0b110d",
-        paper: isLight ? "#ffffff" : "#131c16",
+        default: isLight ? "#f6f3f3" : "#121011",
+        paper: isLight ? "#ffffff" : "#1c1819",
       },
-      // Field green.
+      // Maroon. Lifted in dark mode so it still reads against the background.
       primary: {
-        main: isLight ? "#1f7a3d" : "#4cc274",
-        contrastText: isLight ? "#ffffff" : "#06170c",
+        main: isLight ? "#7a1c29" : "#e06a76",
+        dark: isLight ? "#5c1420" : "#c4505c",
+        contrastText: isLight ? "#ffffff" : "#1a0a0c",
       },
       secondary: {
-        main: isLight ? "#8a4b22" : "#d89463",
+        main: isLight ? "#b3263a" : "#f08a94",
+        contrastText: isLight ? "#ffffff" : "#1a0a0c",
       },
       text: isLight
-        ? { primary: "#14201a", secondary: "#56685d" }
-        : { primary: "#e6efe9", secondary: "#93a69a" },
-      divider: isLight ? "rgba(20, 40, 28, 0.1)" : "rgba(255, 255, 255, 0.1)",
+        ? { primary: "#1f1416", secondary: "#6a5a5d" }
+        : { primary: "#f1eaeb", secondary: "#a8999b" },
+      divider: isLight ? "rgba(70, 20, 28, 0.12)" : "rgba(255, 255, 255, 0.1)",
     },
     shape: {
-      borderRadius: 12,
+      borderRadius: 6,
     },
     typography: {
       fontFamily: '"Inter", system-ui, sans-serif',
@@ -47,8 +52,9 @@ export function getTheme(mode: PaletteMode): ThemeOptions {
       MuiDialog: {
         styleOverrides: { paper: { backgroundImage: "none" } },
       },
+      // Square-ish tags rather than pills.
       MuiChip: {
-        styleOverrides: { label: { fontWeight: 600 } },
+        styleOverrides: { root: { borderRadius: 4 }, label: { fontWeight: 600 } },
       },
       MuiToggleButton: {
         styleOverrides: { root: { textTransform: "none", fontWeight: 600 } },

@@ -28,6 +28,7 @@ import {
   faUser,
   faUserShield,
 } from "@fortawesome/free-solid-svg-icons";
+import { BAR_COLOR } from "../theme";
 import { useColorMode } from "../utils/colorModeContext";
 import type { Self, View } from "../utils/types";
 
@@ -52,12 +53,13 @@ const NavBar = ({ user, view, onNavigate, onSignOut }: NavBarProps) => {
   const orgs = user.organizations;
   const activeOrg = view.name === "org" ? orgs.find((o) => o.id === view.orgId) : undefined;
   const navButton = (active: boolean) => ({
-    color: active ? "primary.main" : "text.secondary",
-    bgcolor: active ? "action.selected" : "transparent",
+    color: active ? "#fff" : "rgba(255, 255, 255, 0.78)",
+    bgcolor: active ? "rgba(255, 255, 255, 0.16)" : "transparent",
+    "&:hover": { bgcolor: "rgba(255, 255, 255, 0.1)", color: "#fff" },
   });
 
   return (
-    <AppBar position="sticky" color="inherit" elevation={0} sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <AppBar position="sticky" elevation={0} sx={{ bgcolor: BAR_COLOR[mode], color: "#fff" }}>
       <Container maxWidth="lg" disableGutters>
         <Toolbar sx={{ gap: 1 }}>
           <Box
@@ -74,7 +76,7 @@ const NavBar = ({ user, view, onNavigate, onSignOut }: NavBarProps) => {
               p: 0,
               mr: 2,
             }}>
-            <Box component="span" sx={{ color: "secondary.main", display: "flex" }}>
+            <Box component="span" sx={{ display: "flex" }}>
               <FontAwesomeIcon icon={faFootball} size="lg" />
             </Box>
             <Typography variant="h6" component="span">
@@ -132,12 +134,12 @@ const NavBar = ({ user, view, onNavigate, onSignOut }: NavBarProps) => {
             color="inherit"
             onClick={(e) => setMainMenu(e.currentTarget)}
             endIcon={<FontAwesomeIcon icon={faChevronDown} size="xs" />}
-            sx={{ display: { xs: "none", md: "inline-flex" }, color: "text.secondary" }}>
+            sx={{ display: { xs: "none", md: "inline-flex" }, ...navButton(false) }}>
             {user.displayName}
           </Button>
           <IconButton
             onClick={(e) => setMainMenu(e.currentTarget)}
-            sx={{ display: { md: "none" } }}
+            sx={{ display: { md: "none" }, color: "#fff" }}
             aria-label="Menu">
             <FontAwesomeIcon icon={faBars} />
           </IconButton>

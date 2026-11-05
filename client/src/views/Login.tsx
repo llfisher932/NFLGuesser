@@ -37,7 +37,7 @@ const Login = ({ onSignedIn }: LoginProps) => {
   return (
     <Container maxWidth="xs" sx={{ py: { xs: 6, sm: 12 } }}>
       <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", mb: 1 }}>
-        <Box sx={{ color: "secondary.main", display: "flex" }}>
+        <Box sx={{ color: "primary.main", display: "flex" }}>
           <FontAwesomeIcon icon={faFootball} size="2x" />
         </Box>
         <Typography variant="h4" sx={{ flex: 1 }}>

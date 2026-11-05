@@ -92,7 +92,7 @@ const AdminUsers = ({ panel, selfId, onPanel, weeks, week }: AdminUsersProps) =>
                 <Stack direction="row" sx={{ alignItems: "center", gap: 1, flexWrap: "wrap" }}>
                   <Typography sx={{ fontWeight: 700 }}>{u.displayName}</Typography>
                   <Typography color="text.secondary">@{u.username}</Typography>
-                  {u.isAdmin && <Chip size="small" color="secondary" label="Admin" />}
+                  {u.isAdmin && <Chip size="small" color="primary" label="Admin" />}
                   {u.id === selfId && <Chip size="small" variant="outlined" label="You" />}
                 </Stack>
                 <Stack direction="row" sx={{ gap: 0.5, flexWrap: "wrap", mt: 0.75, alignItems: "center" }}>
