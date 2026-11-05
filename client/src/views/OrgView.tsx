@@ -21,7 +21,7 @@ import { api } from "../utils/api";
 import type { Game, MemberPick, Organization, OrgTab, Self, StandingRow, Week, WeekKey } from "../utils/types";
 import { useLoad, weekKey } from "../utils/useLoad";
 import WeekPicker from "../components/WeekPicker";
-import { PointsChip, StatusLine, TeamLogo } from "../components/GameCard";
+import { PointsChip, StatusLine, TeamLogo } from "../components/GameParts";
 
 type OrgViewProps = {
   user: Self;

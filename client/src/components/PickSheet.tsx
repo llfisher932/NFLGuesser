@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Alert, Box, Button, Paper, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, Divider, Paper, Stack, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faLock } from "@fortawesome/free-solid-svg-icons";
+import { kickoffLabel, timeUntil } from "../utils/api";
 import type { GameWithPick, Pick } from "../utils/types";
-import GameCard, { type Draft } from "./GameCard";
+import PickRow, { type Draft } from "./PickRow";
 
 type PickSheetProps = {
   /** Remount (key) the sheet when the week changes: drafts start from these. */
@@ -27,12 +28,53 @@ function stateOf(draft: Draft, pick: Pick | null): DraftState {
   return "save";
 }
 
+/** Games that kick off together share a header: "Sun, Nov 8, 1:00 PM · locks in 3d". */
+function groupByKickoff(games: GameWithPick[]) {
+  const groups: { kickoff: string; games: GameWithPick[] }[] = [];
+  for (const game of games) {
+    const last = groups.at(-1);
+    if (last && last.kickoff === game.kickoff) last.games.push(game);
+    else groups.push({ kickoff: game.kickoff, games: [game] });
+  }
+  return groups;
+}
+
+function SlotStatus({ games }: { games: GameWithPick[] }) {
+  if (games.some((g) => g.status === "LIVE")) {
+    return (
+      <Typography variant="body2" sx={{ color: "error.main", fontWeight: 700 }}>
+        Live
+      </Typography>
+    );
+  }
+  if (games.every((g) => g.status === "FINAL" || g.status === "CANCELED")) {
+    return (
+      <Typography variant="body2" color="text.secondary">
+        Final
+      </Typography>
+    );
+  }
+  if (games.some((g) => g.locked)) {
+    return (
+      <Typography variant="body2" color="text.secondary">
+        <FontAwesomeIcon icon={faLock} size="xs" /> Locked
+      </Typography>
+    );
+  }
+  return (
+    <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 600 }}>
+      Locks in {timeUntil(games[0]!.kickoff)}
+    </Typography>
+  );
+}
+
 /**
  * A week of score boxes with one save button for all of them, so you can fill
  * in a whole slate and commit it at once. Only the games you changed are sent.
  */
-const PickSheet = ({ games: initial, onSave, onClear, ignoreLock = false, pickLabel }: PickSheetProps) => {
+const PickSheet = ({ games: initial, onSave, onClear, ignoreLock = false, pickLabel = "Your pick" }: PickSheetProps) => {
   const [games, setGames] = useState(initial);
+  const [expanded, setExpanded] = useState<Set<number>>(() => new Set());
   const [drafts, setDrafts] = useState<Record<number, Draft>>(() =>
     Object.fromEntries(initial.map((g) => [g.id, draftOf(g.pick)])),
   );
@@ -95,24 +137,56 @@ const PickSheet = ({ games: initial, onSave, onClear, ignoreLock = false, pickLa
         </Alert>
       )}
 
-      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" } }}>
-        {games.map((game) => (
-          <GameCard
-            key={game.id}
-            game={game}
-            pick={game.pick}
-            pickLabel={pickLabel}
-            dirty={states.get(game.id) !== "clean"}
-            {...(editable(game) && {
-              draft: drafts[game.id]!,
-              onDraftChange: (draft: Draft) => {
-                setSavedCount(null);
-                setDrafts((d) => ({ ...d, [game.id]: draft }));
-              },
-            })}
-          />
+      <Stack spacing={2}>
+        {groupByKickoff(games).map((group) => (
+          <Card key={group.kickoff} variant="outlined">
+            <Stack
+              direction="row"
+              sx={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                px: { xs: 1.5, sm: 2 },
+                py: 0.75,
+                bgcolor: "action.hover",
+                borderBottom: 1,
+                borderColor: "divider",
+              }}>
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                {kickoffLabel(group.kickoff)}
+              </Typography>
+              <SlotStatus games={group.games} />
+            </Stack>
+
+            {group.games.map((game, i) => (
+              <Box key={game.id}>
+                {i > 0 && <Divider />}
+                <PickRow
+                  game={game}
+                  pick={game.pick}
+                  pickLabel={pickLabel}
+                  dirty={states.get(game.id) !== "clean"}
+                  expanded={expanded.has(game.id)}
+                  onToggle={() =>
+                    setExpanded((open) => {
+                      const next = new Set(open);
+                      if (next.has(game.id)) next.delete(game.id);
+                      else next.add(game.id);
+                      return next;
+                    })
+                  }
+                  {...(editable(game) && {
+                    draft: drafts[game.id]!,
+                    onDraftChange: (draft: Draft) => {
+                      setSavedCount(null);
+                      setDrafts((d) => ({ ...d, [game.id]: draft }));
+                    },
+                  })}
+                />
+              </Box>
+            ))}
+          </Card>
         ))}
-      </Box>
+      </Stack>
 
       <Paper
         elevation={3}

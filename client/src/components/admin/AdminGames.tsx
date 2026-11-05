@@ -20,7 +20,7 @@ import { faPen, faRotate } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../utils/api";
 import type { Game, GameStatus, Week, WeekKey } from "../../utils/types";
 import { useLoad, weekKey } from "../../utils/useLoad";
-import { StatusLine, TeamLogo } from "../GameCard";
+import { StatusLine, TeamLogo } from "../GameParts";
 import WeekPicker from "../WeekPicker";
 
 type AdminGamesProps = {
